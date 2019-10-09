@@ -1,5 +1,6 @@
 const { graphql, buildSchema } = require('graphql');
 const axios = require('axios');
+
 const schema = buildSchema(`
     type Team {
         id: ID
@@ -19,11 +20,5 @@ const resolvers = {
     }
 }
 
-module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
-
-    const teams = await graphql(schema, req.body.query, resolvers);
-    context.res = {
-        body: teams
-    }
-};
+graphql(schema, "{teams {name points id}}", resolvers)
+.then(res => { console.log(JSON.stringify(res)) })
